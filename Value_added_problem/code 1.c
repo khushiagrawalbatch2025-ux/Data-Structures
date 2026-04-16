@@ -1,83 +1,56 @@
-#include <bits/stdc++.h>
-using namespace std;
+#include <stdio.h>
+#include <stdlib.h>
 
 struct Node {
     int data;
-    Node* left;
-    Node* right;
-
-    Node(int val) {
-        data = val;
-        left = right = NULL;
-    }
+    struct Node *left;
+    struct Node *right;
 };
 
-// Function to find elements in range
-void findInRange(Node* root, int low, int high, vector<int>& result) {
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    if (newNode == NULL) exit(1);
+    newNode->data = data;
+    newNode->left = newNode->right = NULL;
+    return newNode;
+}
+
+struct Node* insert(struct Node* root, int data) {
+    if (root == NULL) return createNode(data);
+    
+    if (data < root->data) {
+        root->left = insert(root->left, data);
+    } else {
+        root->right = insert(root->right, data);
+    }
+    return root;
+}
+
+void findInRange(struct Node* root, int low, int high) {
     if (root == NULL) return;
-
-    // If current node is greater than low, left subtree may have valid nodes
-    if (root->data > low) {
-        findInRange(root->left, low, high, result);
-    }
-
-    // If current node is in range, include it
-    if (root->data >= low && root->data <= high) {
-        result.push_back(root->data);
-    }
-
-    // If current node is less than high, right subtree may have valid nodes
-    if (root->data < high) {
-        findInRange(root->right, low, high, result);
-    }
+    
+    if (low < root->data)
+        findInRange(root->left, low, high);
+        
+    if (root->data >= low && root->data <= high)
+        printf("%d ", root->data);
+        
+    if (high > root->data)
+        findInRange(root->right, low, high);
 }
 
-Node* insert(Node* root, int val) {
-    if (root == NULL) return new Node(val);
-
-    if (val < root->data)
-        root->left = insert(root->left, val);
-    else
-        root->right = insert(root->right, val); // >= goes right
-
-    return root;
-}
-
-// Build BST from array
-Node* buildBST(vector<int>& arr) {
-    Node* root = NULL;
-    for (int val : arr) {
-        root = insert(root, val);
-    }
-    return root;
-}
-
-// Helper to print result
 int main() {
-
-
-    int inputSize = 0,low,high;
-    cout<<"Enter the number of elements in input BST:";
-    cin>>inputSize;
-    vector<int> input(inputSize);
-    cout<<endl<<"Enter the elements of BST"<<endl;
-    for(int i=0; i<inputSize; i++)
-    {
-        cin>>input[i];
-    }
-
-    cout<<"Enter the low number:"<<endl;
-    cin>>low;
-    cout<<"Enter the high number:"<<endl;
-    cin>>high;
-
-    Node *root = buildBST(input);
-    vector<int> result;
-    findInRange(root, low, high, result);
-
-    for (int val : result) {
-        cout << val << " ";
-    }
+    printf("Name : Khushi Agrawal\n");
+    printf("Section : D1\n");
+    printf("PRN : 25070521208\n");
+    struct Node* root = NULL;
+    root = insert(root, 17);
+    root = insert(root, 15);
+    root = insert(root, 4);
+    root = insert(root, 18);
+    
+    printf("Output: ");
+    findInRange(root, 4, 18);
+    printf("\n");
     return 0;
 }
-
